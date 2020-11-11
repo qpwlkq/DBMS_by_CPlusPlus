@@ -1,0 +1,263 @@
+
+/*
+2020.11.11
+0. Login_in
+1. create table (是否有语法错误?)
+2. insert 记录(可缺项, 是否能为null?)
+
+3. update 
+4. delete 记录/表格
+5. select 某表某行/全部
+6. 
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void Error(int id) {
+    switch (id) {
+    case 1:
+        cout << "ERROR(00003): There is no " << s; break;
+    case 2:
+        cout << "ERROR(00003): There is no " << s; break;
+    case 3:
+        cout << "ERROR(00003): There is no " << s; break;
+    case 4:
+        cout << "ERROR(00003): There is no " << s; break;
+    }
+}
+
+const int maxn = 10; // 最大表数
+const int maxm = 10; // 最大列数
+
+set<int>st; //表集,
+
+map<string, int>mp;
+map<int, string> mp1;
+map<int, int> g; //记录数量
+
+int cnt; //表数
+/*
+int cnt_int;
+int cnt_string;
+int cnt_double;
+int cnt_ll;
+*/
+
+int len[maxn]; //列数
+
+int vis[maxn];
+string s[maxn];
+
+int num[maxn];
+
+struct node {
+    string s; //数据类型
+    int len;
+    int cnt[10];
+
+    vector<double> data1; //支持最多10个表
+    vector<float> data2;
+    vector<ll> data3;
+    vector<int> data4;
+    vector<string> data5;
+
+    node() {
+        for (auto i : cnt ) {
+            cnt[i] = 0;
+            len = 0;
+            s = "";
+        }
+        data1.clear();
+        data2.clear();
+        data3.clear();
+        data4.clear();
+        data5.clear();
+    }
+}ab[maxn][maxm];
+
+/*
+vector<double> data1[10]; //支持最多10个表
+vector<ll> date2[10];
+vector<int> date3[10];
+vector<string> date4[10];
+*/
+
+string ss[maxn][maxm][2]; // 一维:名称, 二维:数据类型
+
+void init(int x = 0) {
+    cout << (!x ? "    -> " : "qpsql>");
+}
+
+void quit() {
+    init(1);
+    cout << "quit\n";
+}
+
+string Tolower(string s) {
+    transform(s.begin(), s.end(), s.begin(), tolower);
+    return s;
+}
+
+void create_Table (string name) {
+    mp[name] = ++cnt;
+    string S;
+    int id = 0;
+    while (1) {
+        init();
+        cin >> S;
+        if (S == ";") {
+            cout << "CREATE COMPLETE\n";
+            break;
+        }
+        id++;
+        ss[cnt][id][0] = Tolower(S);
+        cin >> S;
+        ss[cnt][id][1] = Tolower(S);
+    }
+    len[cnt] = id;
+}
+
+int Find(string s, int id) {
+    int l = len[id];
+    for (int i = 1; i <= l; i++) {
+        if (ss[id][i][0] == s)
+            return i;
+    }
+    Error(3);
+    return 0;
+}
+
+void st_insert(int n, int m, int ) {
+
+
+}
+
+void insert() {
+    string S;
+    cin >> S;
+    int id = mp[S];
+    
+    while (1) {
+        cin >> S;
+        if (S == ";") {
+            cout << "INSERT COMPLETE\n";
+        }
+        S = Tolower(S);
+        int new_id = Find(S, id); //寻找位置
+        //cin >> S;
+        //S = Tolower(S);
+        st_insert(id, new_id, num[id]);
+    }
+}
+
+void debug() {
+    for (int i = 1; i <= cnt; i++) {
+        init();
+        for (int j = 1; j <= len[i]; j++) {
+            cout << ss[i][j][0] << ' ';
+        }
+        cout << '\n';
+    }
+}
+
+void error() {
+    init();
+    cout << "ERROR(00001): You have an error in your SQL syntax; \n";
+    //cout << "ERROR(00001): 你语法写错了, 一定不是我程序的问题\n";
+}
+
+void Login_in() {
+    system("color 03");
+    string s;
+    while (1) {
+        cout << "Enter password: ";
+        cin >> s;
+        if (s == "quit") {
+            quit();
+            break;
+        }
+
+        if (s == "******") { //假装像mysql一样可以隐藏输入密码
+            system("cls");
+            system("color 04");
+            puts("\nWelcome to the QpSQL monitor!");
+            puts("Commands end with ';'!");
+            puts("Server version: 0.0.0.1 Alpha");
+            puts("Qpwlkq is licensed under the Apache License Version 2.0");
+            //system("color 03");
+            break;
+        }
+        else {
+            cout << "ERROR(00002): Access denied for user 'root'@'localhost' (using password: YES)\n";
+        }
+    }
+}
+
+void select() {
+
+}
+
+void Delete() {
+
+}
+
+int main() {
+    Login_in();
+    init(1);
+    //cout << 'x';
+    while (cin >> s[0]) {
+        s[0] = Tolower(s[0]);
+        if (s[0] == "quit") {
+            quit();
+            break;
+        }
+        if (s[0] == "create") {
+            cin >> s[1] >> s[2];
+            create_Table(s[2]);
+        }
+        else if (s[0] == "insert") {
+            insert();
+        }
+        else if (s[0] == "select") {
+            select();
+        }
+        else {
+            init(1);
+        }
+        //debug();
+    }
+    return 0;
+}
+
+/*
+
+create table name1
+    int
+
+update
+insert name1, name2 from name2 where ???
+
+delete ???
+
+alert
+
+
+空格分隔符
+每个语句以单独';'结束
+1. create语句
+create table new
+Sname String
+Sgrade int
+;
+2. insert语句
+insert new
+Sname asdfasdf
+Sgrade 100
+;
+
+
+
+*/
