@@ -3,27 +3,6 @@
 注意事项:
 每一条语句以单独的';'结束!!!
 不能与变量连起来.
-
-2020.11.11
-1. Login_in
-2. create table (是否有语法错误?)
-3. insert 记录(可缺项, 是否能为null?)
-4. error 错误集合
-
-5. drop 表格
-6. select 某表某行/全部
-7. update name1 from name2 where name3 = XXXX
-
-*/
-
-/*
-create table t1
-a string
-;
-insert t1
-a asfd
-;
-
 */
 
 #include <bits/stdc++.h>
@@ -61,8 +40,10 @@ T Input(T& x) {
         //string s = to_string(x);
         //tmp_str[tmp_cnt++] = s;
     }
-    else 
+    else {
         cin >> x;
+        //mycout << x << '\n';
+    }
     //cout << x << '\n';
     return x;
 }
@@ -304,6 +285,7 @@ void insert() {
     else {
         cin >> S;
         tmp_str[tmp_cnt++] = S;
+        mylog << S << '\n';
     }
     int id = mp[S];
     num[id] ++;
@@ -339,7 +321,7 @@ void insert() {
         st_insert(id, new_id, num[id]);
     }
     if (FLAG == 0) {
-        cout << tmp_cnt << '\n';
+        //cout << tmp_cnt << '\n';
         for(int i = 0 ; i < 2 ; i++)
             mycout << tmp_str[i] << ' ';
         mycout << tmp_str[2] << '\n';
@@ -366,7 +348,7 @@ void debug() {
 }
 
 void Login_in() {
-    system("color 04");
+    //system("color 04");
     string s;
     while (1) {
         cout << "Enter password: ";
@@ -378,7 +360,7 @@ void Login_in() {
 
         if (s == "******") { //假装像mysql一样可以隐藏输入密码
             system("cls");
-            system("color 03");
+            //system("color 04");
             puts("Welcome to the QpSQL monitor!");
             puts("Commands end with ';'!");
             puts("Server version: 0.0.0.1 Alpha");
@@ -534,6 +516,7 @@ void select() {
     string s, ss;
     cin >> s;
     s = Tolower(s);
+    mylog << s << '\n';
     int flag = 1;
     if (s == "*" || s == "all") {
         flag = 0;
@@ -591,14 +574,19 @@ void Drop() {
     string s;
     if (FLAG)
         oldfile >> s;
-    else
+    else {
         cin >> s;
+        mycout << "drop table ";
+    }
     s = Tolower(s);
     if (s == "table") {
         if (FLAG)
             oldfile >> s;
-        else 
+        else {
             cin >> s;
+            mylog << s;
+            mycout << s;
+        }
         st.erase(mp[s]);
         len[mp[s]] = 0;
         num[mp[s]] = 0;
@@ -606,23 +594,30 @@ void Drop() {
         mp[s] = 0;
         if (FLAG)
             oldfile >> s;
-        else
+        else {
             cin >> s; // ';'
-        init();
+            mycout << " ;" << '\n';
+        }
+        if(FLAG == 0)
+            init();
         if(FLAG == 0)
             cout << "DROP COMPLETE\n";
     }
     else if (s == "data") {
         cin >> s; //from
+        mycout << s << ' ';
         cin >> s; //table_name
+        mycout << s << ' ';
         cin >> s; // ';'
+        mycout << s;
     }
     else {
         if(FLAG == 0)
             Error(6);
         return;
     }
-    init(1);
+    if(FLAG == 0)
+        init(1);
 }
 
 void Update() {
@@ -631,10 +626,17 @@ void Update() {
         oldfile >> s >> s >> s2 >> sss;
     }
     else {
+        mycout << "update ";
         cin >> s; //table
+        mycout << s << ' ';
         cin >> s; //table_name
-        cin >> s2; //data
+        mycout << s << ' ';
+
+        cin >> s2; //data / set
+        mycout << s2 << ' ';
         cin >> sss;
+        mycout << sss << ' ';
+        mylog << s << '\n';
     }
     //cnt_1 = 1;
     //cin >> tp[cnt_1]; //data_name
@@ -654,9 +656,12 @@ void Update() {
                     if (*it == s1) {
                         if (FLAG)
                             oldfile >> s;
-                        else
+                        else {
                             cin >> s;
+                            mycout << s1 << " to " << ' ';
+                        }
                         *it = Input(s1);
+                        mycout << s1 << '\n';
                     }
                 }
                 break;
@@ -667,9 +672,12 @@ void Update() {
                     if (*it == s2) {
                         if (FLAG)
                             oldfile >> s;
-                        else 
+                        else {
                             cin >> s;
+                            mycout << s2 << " to" << ' ';
+                        }
                         *it = Input(s2);
+                        mycout << s2 << '\n';
                     }
                 }
                 //int x = ab[id][j].data2.push_back(Input(s2));
@@ -681,9 +689,12 @@ void Update() {
                     if (*it == s3) {
                         if (FLAG)
                             oldfile >> s;
-                        else
+                        else {
                             cin >> s;
+                            mycout << s3 << " to" << ' ';
+                        }
                         *it = Input(s3);
+                        mycout << s3 << '\n';
                     }
                 }
                 //int x = ab[id][j].data3.push_back(Input(s3));
@@ -695,9 +706,12 @@ void Update() {
                     if (*it == s4) {
                         if (FLAG)
                             oldfile >> s;
-                        else
+                        else {
                             cin >> s;
+                            mycout << s4 << " to" << ' ';
+                        }
                         *it = Input(s4);
+                        mycout << s4 << '\n';
                     }
                 }
                 //ab[id][j].data4.push_back(Input(s4));
@@ -709,8 +723,11 @@ void Update() {
         init(1);
     if (FLAG)
         oldfile >> s;
-    else
+    else {
         cin >> s;
+        mycout << ';' << '\n';
+    }
+    //cout <<"???" << '\n';
 }
 
 void File() {
@@ -751,7 +768,7 @@ void File() {
     }
     oldfile.close();
     FLAG = 0;
-    system("color 05");
+    //system("color 05");
     //init(1);
 }
 
@@ -783,28 +800,37 @@ int main() {
         }
         case 2: {
             cin >> s[1] >> s[2];
-            create_Table(s[2]); break;
+            create_Table(s[2]);
             mylog << "create" << " " << s[2] << '\n';
+            break;
         }
         case 3: {
-            insert(); break;
-            mylog << "insert" << '\n';
+            insert();
+            mylog << "insert" << ' ';
+            break;
         }
         case 4: {
-            select(); break;
-            mylog << "select" << '\n';
+            select();
+            mylog << "select" << ' ';
+            break;
         }
         case 5: {
-            Drop(); break;
-            mylog << "drop" << '\n';
+            Drop();
+            mylog << "drop" << ' ';
+            break;
         }
         case 6: {
-            Update(); break;
-            mylog << "update" << '\n';
+            Update();
+            mylog << "update" << ' ';
+            fg1 = 1;
+            break;
         }
         case 7: {
-            Print_Table_All("*", ";"); break;
+            string xx;
+            cin >> xx >> xx;
+            Print_Table_All("*", ";");
             mylog << "show" << '\n';
+            break;
         }
         default: {
             Error(6);
@@ -857,186 +883,6 @@ Sgrade 100
 
 */
 
-
-
-
-
-/*
-5 4
-1 2 3 4 5
-
-00100
-01111
-10011
-
-5 6
-1 2 3 4 10
-
-00110
-10000
-10010
-
-
-00110
-10100
-11110
-*/
-
-/*
-#include <bits/stdc++.h>
-#include <unordered_map>
-#include <hash_map>
-using namespace std;
-
-int num[2][13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-num[0][] 平年
-
-map<int, int>mp;
-hash_map<int, int >mp;
-unordered_map<int, int>mp;
-int a[80000010];
-int b[365 * 8000 + 10];
-
-int a[10010][13][32];
-int b[10000 * 365 + 10];
-
-bool f(int year) {
-    if (year % 400 == 0)
-        return 1;
-    else if (year % 4 == 0 && year % 100 != 0)
-        return 1;
-    return 0;
-}
-
-int ans;
-
-bool j(int x) {
-    while (x) {
-        cout << x << '\n';
-        if (x % 1000 == 202) {
-            return 1;
-        }
-        x /= 10;
-    }
-    return 0;
-}
-
-void init() {
-    int st = 22020101;
-    int de = 22021231;
-    int st = 20000101;
-     2202 01 01 2202 12 31a
-    int de = 99991231;
-    int flag = 0;
-    int cnt = 0;
-    b[0] = 0;
-    for (int i = st; i <= de;) {
-        mp[i - 20000000] = ++cnt;
-        a[i / 10000][i % 10000 / 100][i % 100] = ++cnt;
-        if (j(i)) {
-            ans++;
-            b[cnt] = b[flag] + 1;
-        }
-        else {
-            b[cnt] = b[flag];
-        }
-        flag = cnt;
-        cout << i << '\n';
-        int y = i / 10000;
-        int m = i % 10000 / 100;
-        int d = i % 100;
-        if (d == num[f(y)][m]) {
-            if (m == 12) {
-                y = y + 1;
-                m = 1;
-                d = 1;
-                i = y * 10000 + m * 100 + d;
-            }
-            else {
-                y = y;
-                m = m + 1;
-                d = 1;
-                i = y * 10000 + m * 100 + d;
-            }
-        }
-        else {
-            i += 1;
-        }
-    }
-}
-
-int main() {
-    init();
-    int t;
-    int y1, y2, m1, m2, d1, d2;
-    scanf("%d", &t);
-    while (t--) {
-        ans = 0;
-        scanf("%d %d %d", &y1, &m1, &d1);
-        scanf("%d %d %d", &y2, &m2, &d2);
-        int st = y1 * 10000 + m1 * 100 + d1;
-        int ed = y2 * 10000 + m2 * 100 + d2;
-        int ct = b[a[y2][m2][d2]] - b[a[y1][m1][d1]] + j(st);
-        int ct = b[mp[de - 20000000]] - b[mp[st - 20000000]] + j(st);
-        printf("%d\n", ct);
-    }
-    return 0;
-}
-*/
-
-
-/*
-测试语句:
-
-create table t1
-a int
-b int
-;
-create table t2
-c double
-d ll
-;
-show * ;
-insert t1
-a 100
-b 123
-;
-show t1 ;
-insert t1
-a 200
-b 321
-;
-show t1 ;
-insert t2
-c 2.2
-d 10000000000
-;
-insert t2
-c 6.6
-d 200000000000
-;
-show t2 ;
-
-create table t1
-a int
-b int
-;
-insert t1
-a 100
-b 200
-;
-show t1 ;
-select some a from t1 ;
-select some b from t1 ;
-select some a b from t1 ;
-select all from t1 ;
-update table t1 data a 100 to 200 ;
-
-
-update table table_name2 data name1 value1 to value2 ;
-
-*/
-
 /*
 
 
@@ -1047,6 +893,7 @@ update table table_name2 data name1 value1 to value2 ;
 
 
 /*
+文件输入输出测试
 #include <bits/stdc++.h>
 #include <chrono>
 using namespace std;
@@ -1103,6 +950,7 @@ int main() {
 
 
 /*
+
 create table t1
 a int
 b double
@@ -1132,12 +980,16 @@ b 321
 ;
 select * ;
 select * from t1 ;
-select a from t2 ;
-select a from t3 ;
+select a b from t1 ;
+select a b c from t1 ;
+
+show databases ;
+
+drop table t1 ;
+
 update table t1 data a 100 to 200 ;
 
-insert into t1 a b c values 1 2 3 ;
-update t1 set a = 200 where a = 100;
+
 
 
 */
